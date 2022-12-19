@@ -28,10 +28,10 @@ export default function Home() {
           .map((x) => x.item);
 
   return (
-    <main class="lg:container mx-auto my-5">
-      <div class="flex justify-between items-center">
+    <main class="mx-auto my-5 lg:container">
+      <div class="flex items-center justify-between">
         <h1 class="text-6xl font-bold text-primary">Lumberjack</h1>
-        <FileInput class="file-input file-input-bordered file-input-primary" />
+        <FileInput class="file-input-bordered file-input-primary file-input" />
       </div>
 
       <div class="divider" />
@@ -40,7 +40,7 @@ export default function Home() {
         <DebouncedInput
           type="text"
           debounce={200}
-          class="input input-bordered input-primary flex-grow"
+          class="input-bordered input-primary input flex-grow"
           placeholder="Search..."
           onInput={setSearchString}
         />
