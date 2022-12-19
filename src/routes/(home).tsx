@@ -5,6 +5,8 @@ import { FlagButton } from "~/components/LogButton";
 import { LogCard } from "~/components/LogCard";
 import { flaggedLogs, LogLevel } from "~/stores/logs";
 import { classNames } from "~/utils/lib";
+import autoAnimate from "@formkit/auto-animate";
+import { DebouncedInput } from "~/components/DebouncedInput";
 
 export default function Home() {
   const [searchString, setSearchString] = createSignal("");
@@ -13,7 +15,6 @@ export default function Home() {
   const fuse = () =>
     new Fuse(flaggedLogs(), {
       keys: ["msg", "ts", "rawTs"],
-
       includeMatches: true,
       threshold: 0.4,
       useExtendedSearch: extendedSearch(),
@@ -29,28 +30,31 @@ export default function Home() {
   return (
     <main class="lg:container mx-auto my-5">
       <div class="flex justify-between items-center">
-        <h1 class="text-6xl font-bold">Lumberjack</h1>
+        <h1 class="text-6xl font-bold text-primary">Lumberjack</h1>
         <FileInput class="file-input file-input-bordered file-input-primary" />
       </div>
 
       <div class="divider" />
 
       <div class="flex gap-4">
-        <input
+        <DebouncedInput
           type="text"
+          debounce={200}
           class="input input-bordered input-primary flex-grow"
           placeholder="Search..."
-          onInput={(e) => setSearchString(e.currentTarget.value)}
+          onInput={setSearchString}
         />
+
         <button
           onClick={() => setExtendedSearch((prev) => !prev)}
           class={classNames(
-            "btn-secondary btn",
+            "btn-accent btn",
             !extendedSearch() && "btn-outline"
           )}
         >
           Regex
         </button>
+
         <FlagButton logLevel={LogLevel.DEBUG}>Debug</FlagButton>
         <FlagButton logLevel={LogLevel.INFO} class="btn-info">
           Info
@@ -65,7 +69,7 @@ export default function Home() {
 
       <div class="divider" />
 
-      <div class="space-y-4">
+      <div class="space-y-4" ref={(el) => autoAnimate(el, { duration: 250 })}>
         <For each={filteredLogs()}>{(log) => <LogCard log={log} />}</For>
       </div>
     </main>
