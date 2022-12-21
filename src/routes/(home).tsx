@@ -1,5 +1,5 @@
 import Fuse from "fuse.js";
-import { createSignal, For } from "solid-js";
+import { createSignal, For, Show } from "solid-js";
 import { FileInput } from "~/components/FileInput";
 import { FlagButton } from "~/components/LogButton";
 import { LogCard } from "~/components/LogCard";
@@ -33,6 +33,7 @@ export default function Home() {
         <h1 class="text-6xl font-bold text-primary">Lumberjack</h1>
         <FileInput class="file-input-bordered file-input-primary file-input" />
       </div>
+      <p class="text-xl">A stupid log processing tool</p>
 
       <div class="divider" />
 
@@ -70,7 +71,12 @@ export default function Home() {
       <div class="divider" />
 
       <div class="space-y-4" ref={(el) => autoAnimate(el, { duration: 250 })}>
-        <For each={filteredLogs()}>{(log) => <LogCard log={log} />}</For>
+        <Show
+          when={filteredLogs().length > 0}
+          fallback={<p class="text-lg">Nothing to show here...</p>}
+        >
+          <For each={filteredLogs()}>{(log) => <LogCard log={log} />}</For>
+        </Show>
       </div>
     </main>
   );
